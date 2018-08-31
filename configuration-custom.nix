@@ -38,15 +38,13 @@
     wget
     vim
     libreoffice-fresh
-    arc-theme
+    adapta-gtk-theme
     papirus-icon-theme
     neofetch
     firefox
     git
     fcitx
     fcitx-configtool
-    abiword
-    gnumeric
     transmission
     gptfdisk
   ];
