@@ -48,6 +48,7 @@
     transmission
     gptfdisk
     dos2unix
+    gnome3.zenity  
   ];
 
   fonts = {
