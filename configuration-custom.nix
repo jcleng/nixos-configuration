@@ -30,8 +30,6 @@
     wget
     vim
     libreoffice-fresh
-    adapta-gtk-theme
-    papirus-icon-theme
     neofetch
     firefox
     git
@@ -68,8 +66,10 @@
     enabled = "fcitx";
   };
 
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome3.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.pantheon.enable = true;
+  services.xserver.displayManager.lightdm.greeters.pantheon.enable = true;
+  services.pantheon.files.enable = true;
 
   users.users.bobby285271 =
   { isNormalUser = true;
@@ -78,6 +78,6 @@
     extraGroups = [ "wheel" "networkmanager" ];
   };
 
-  system.stateVersion = "18.09";
+  system.stateVersion = "19.03";
 
 }
