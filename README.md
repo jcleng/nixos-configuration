@@ -12,6 +12,10 @@
 
 ## 启动镜像进入图形化界面
 > 烧写图形版nixos-graphical镜像到U盘
+> 在linux里面
+```shell
+sudo dd if=nix.iso of=/dev/sdc
+```
 * 默认的启动项进不去就可以试一试第二个选项(nomodeset)
 * 启动进入命令行,默认是root用户
 * 用户名`root`密码为空
@@ -52,18 +56,121 @@
 * 现在需要一个配置文件,来配置系统安装默认安装的数据以及安装配置`/mnt/etc/nixos/configuration.nix`
 * 创建配置`nixos-generate-config --root /mnt`
 * 编辑`nano /mnt/etc/nixos/configuration.nix`
-```
-# 配置EFI启动,修改/添加
-boot.loader.systemd-boot.enable = true;
-# EFI安装grub的硬盘配置为nodev
-boot.loader.grub.devices = "nodev";
-# 有其他系统如win10,自动添加到grub
-boot.loader.grub.useOSProber = true;
-# 到最后记得取消注释无线网卡配置,xserver,KDE桌面
-```
+
 * 开始安装`nixos-install`
 * 等待,完成之后`reboot`
 
-## 安装软件
-* 修改配置文件,然后`nixos-rebuild switch`
 
+## 配置说明 configuration.nix
+> 查看当前启动系统引导类型
+```shell
+# 存在就是UEFI,不存在就是BIOS
+ls /sys/firmware/efi
+```
+> 配置之后请`nixos-rebuild switch`默认设为默认选项,`nixos-rebuild test`不设为默认选项,重载配置,每一次配置之后就会生成一个grub引导,方便回滚
+> 基础配置
+```config
+{ config, pkgs, ... }: {
+  imports = [
+    # 使用默认的硬件配置
+    ./hardware-configuration.nix
+  ];
+
+  boot.loader.grub.device = "/dev/sda";   # (for BIOS systems only,硬盘位置)
+  boot.loader.systemd-boot.enable = true; # (for UEFI systems only)
+  boot.loader.grub.efiSupport = true;     # grub是否支持efi
+
+  # Enable the OpenSSH server.
+  services.sshd.enable = true;
+}
+```
+> 常用配置
+```
+# 有其他系统如win10,自动添加到grub
+boot.loader.grub.useOSProber = true;
+
+# 配置代理服务器
+networking.proxy.default = "http://user:password@proxy:port/";
+networking.proxy.noProxy = "127.0.0.1,localhost";
+
+# 如果是虚拟机(QEMU/VM),请配置用户名和密码
+# 用户名:jcleng
+# 密码:123456
+users.users.jcleng.initialHashedPassword = "123456";
+
+# 主机名称
+networking.hostName = "jcleng";
+
+# 支持图形化请开启xserver服务
+services.xserver.enable = true;
+services.xserver.displayManager.sddm.enable = true;
+services.xserver.layout = "us";
+
+# 开启xserver服务之后才能使桌面环境,镜像里面带有plasma5,那就开启第一个plasma5,其他的自行安装
+services.xserver.desktopManager.plasma5.enable = true;
+services.xserver.desktopManager.xfce.enable = true;
+services.xserver.desktopManager.gnome3.enable = true;
+services.xserver.desktopManager.mate.enable = true;
+services.xserver.windowManager.xmonad.enable = true;
+services.xserver.windowManager.twm.enable = true;
+services.xserver.windowManager.icewm.enable = true;
+services.xserver.windowManager.i3.enable = true;
+
+# 登录管理器,推荐使用第一个
+services.xserver.displayManager.sddm.enable = true;
+services.xserver.displayManager.slim.enable = true;
+
+# Fcitx输入法
+i18n.inputMethod = {
+  enabled = "fcitx";
+  fcitx.engines = with pkgs.fcitx-engines; [ mozc hangul m17n ];
+};
+
+# 地区配置
+i18n = {
+  consoleKeyMap = "us";
+  defaultLocale = "zh_CN.UTF-8";
+  supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+};
+
+# 时区配置
+time.timeZone = "Asia/Shanghai";
+
+# 键盘布局
+services.xserver.layout = "de";
+services.xserver.xkbVariant = "neo";
+
+# 字体配置
+fonts = {
+  fontconfig.enable = true;
+  enableFontDir = true;
+  enableGhostscriptFonts = true;
+  fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    wqy_microhei
+    wqy_zenhei
+  ];
+};
+
+# 安装软件,默认安装时没有浏览器/网络管理器等的
+environment.systemPackages = with pkgs; [
+  wget
+  vim
+  firefox
+  git
+  fcitx
+  fcitx-configtool
+];
+
+```
+## 升级
+```
+# 查看升级通道
+nix-channel --list
+# 添加
+nix-channel --add https://nixos.org/channels/nixos-19.03 nixos
+# 升级到最新
+nixos-rebuild switch --upgrade
+```
