@@ -1,9 +1,15 @@
 # NixOS Linux(19.03) 配置安装教程
+
 > [官方手册](https://nixos.org/nixos/manual/)
+
 > [Linux中国 知乎文章 NixOS Linux： 先配置后安装的 Linux](https://zhuanlan.zhihu.com/p/30286477)
+
 > [官方下载页面](https://nixos.org/nixos/download.html)
+
 > [softpedia下载地址](https://linux.softpedia.com/get/System/Operating-Systems/Linux-Distributions/NixOS-27710.shtml)
+
 > 推荐先安装`Internet Download Manager (IDM)`多线程下载,下载更快一些
+
 ## 启动镜像进入图形化界面
 > 烧写图形版nixos-graphical镜像到U盘
 * 默认的启动项进不去就可以试一试第二个选项(nomodeset)
@@ -16,7 +22,7 @@
 * 网络必须要配置通,默认打开kde桌面环境是已经自动连接网络了的,安装过程需要下载文件,查看状态`ip a`,手动配置网络`ifconfig`来配置,这里不做多介绍
 * 要在图形安装程序上手动配置网络，请首先使用`systemctl stop network manager`禁用网络管理器
 * 如需使用ssh,开启ssh守护进程`systemctl start sshd`
-* 没有图形化界面连接wifi`wpa_supplicant -B -i interface -c <(wpa_passphrase 'SSID' 'key')`
+* 没有图形化界面连接wifi,查看网卡名`ip a`,连接`wpa_supplicant -B -i 网卡名 -c <(wpa_passphrase 'wifi名' 'wifi密码')`
 
 ## 分区安装盘
 * 查看挂载的磁盘`lsblk`
@@ -40,8 +46,8 @@
 * 进入`parted`命令,里面打印`print`,查看File system
 
 ## 安装系统
-* 挂载分区`mount /dev/disk/by-label/nixos /mnt`或者`mount /dev/sda1`
-* 挂载EFI引导分区`mkdir -p /mnt/boot`,`mount /dev/disk/by-label/boot /mnt/boot`或者`mount /dev/sda2`
+* 挂载分区`mount /dev/disk/by-label/nixos /mnt`或者`mount /dev/sda1 /mnt`
+* 挂载EFI引导分区`mkdir -p /mnt/boot`,`mount /dev/disk/by-label/boot /mnt/boot`或者`mount /dev/sda2 /mnt/boot`
 * 开启swap`swapon /dev/sda3`
 * 现在需要一个配置文件,来配置系统安装默认安装的数据以及安装配置`/mnt/etc/nixos/configuration.nix`
 * 创建配置`nixos-generate-config --root /mnt`
@@ -61,6 +67,3 @@ boot.loader.grub.useOSProber = true;
 ## 安装软件
 * 修改配置文件,然后`nixos-rebuild switch`
 
-## 创建用户
-* 创建用户`useradd -m jcleng`
-* 为该用户设置密码`passwd jcleng`
