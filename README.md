@@ -192,6 +192,10 @@ nano /etc/sudoers
 ## 找到并修改取消注释
 ## Allows people in group wheel to run all commands
 %wheel    ALL=(ALL)    ALL
+## add
+## User privilege specification
+root    ALL=(ALL:ALL) ALL
+jcleng ALL=(ALL:ALL) ALL
 ## 新增用户
 useradd -m jcleng
 ## 设置密码
