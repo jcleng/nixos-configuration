@@ -170,7 +170,11 @@ environment.systemPackages = with pkgs; [
 ```
 # 安装vscode
 # 先开启allowUnfree
-nixpkgs.config.allowUnfree = true;
+nixpkgs.config = {
+  # 开启Unfree
+  allowUnfree = true;
+  allowBroken = true;
+}
 # 重新加载配置(重启)
 nixos-rebuild switch
 # 安装
