@@ -169,6 +169,25 @@ environment.systemPackages = with pkgs; [
   fcitx-configtool
 ];
 
+# 安装软件(proxychains4是一个命令行使用代理的软甲,需要先安装)
+nix-env -i nodejs
+# proxychains4 nix-env -i nodejs
+
+# 整个系统回滚
+nixos-rebuild switch --rollback
+
+# 添加用户
+nano /etc/sudoers
+## 找到并修改取消注释
+## Allows people in group wheel to run all commands
+%wheel    ALL=(ALL)    ALL
+## 新增用户
+useradd -m jcleng
+## 设置密码
+passwd jcleng
+## 使其属于root组,否则不能使用su *命令
+usermod -g root jcleng
+
 ```
 ## 升级
 ```
