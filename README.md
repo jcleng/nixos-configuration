@@ -131,7 +131,6 @@ i18n.consoleKeyMap = "us";
 # Fcitx输入法
 i18n.inputMethod = {
   enabled = "fcitx";
-  fcitx.engines = with pkgs.fcitx-engines; [ mozc hangul m17n ];
 };
 
 # fcitx拼音包
