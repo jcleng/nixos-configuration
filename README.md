@@ -62,6 +62,7 @@ sudo dd if=nix.iso of=/dev/sdc
 
 
 ## 配置说明 configuration.nix
+> [官方配置详解](https://nixos.org/nixos/manual/options.html)
 > 查看当前启动系统引导类型
 ```shell
 # 存在就是UEFI,不存在就是BIOS
