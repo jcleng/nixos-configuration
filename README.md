@@ -169,6 +169,10 @@ environment.systemPackages = with pkgs; [
   fcitx-configtool
 ];
 
+```
+## 安装软件
+> su命令行使用
+```
 # 安装软件(proxychains4是一个命令行使用代理的软甲,需要先安装)
 nix-env -i nodejs
 # proxychains4 nix-env -i nodejs
@@ -187,7 +191,6 @@ useradd -m jcleng
 passwd jcleng
 ## 使其属于root组,否则不能使用su *命令
 usermod -g root jcleng
-
 ```
 ## 升级
 ```
