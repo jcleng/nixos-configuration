@@ -123,17 +123,15 @@ services.xserver.windowManager.i3.enable = true;
 services.xserver.displayManager.sddm.enable = true;
 services.xserver.displayManager.slim.enable = true;
 
+# 地区配置
+i18n.supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+i18n.defaultLocale = "zh_CN.UTF-8";
+i18n.consoleKeyMap = "us";
+
 # Fcitx输入法
 i18n.inputMethod = {
   enabled = "fcitx";
   fcitx.engines = with pkgs.fcitx-engines; [ mozc hangul m17n ];
-};
-
-# 地区配置
-i18n = {
-  consoleKeyMap = "us";
-  defaultLocale = "zh_CN.UTF-8";
-  supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
 };
 
 # 时区配置
