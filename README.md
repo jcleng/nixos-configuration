@@ -90,6 +90,9 @@ ls /sys/firmware/efi
 boot.loader.grub.useOSProber = true;
 
 # 配置代理服务器
+# curl -o csnet https://csnet.aite.xyz/files/csnet_client/csnet_client_linux_amd64
+# chmod 777 ./csnet
+# networking.proxy.default = "http://127.0.0.1:54321/";
 networking.proxy.default = "http://user:password@proxy:port/";
 networking.proxy.noProxy = "127.0.0.1,localhost";
 
