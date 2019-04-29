@@ -107,7 +107,6 @@ networking.hostName = "jcleng";
 
 # 支持图形化请开启xserver服务
 services.xserver.enable = true;
-services.xserver.displayManager.sddm.enable = true;
 services.xserver.layout = "us";
 
 # 开启xserver服务之后才能使桌面环境,镜像里面带有plasma5,那就开启第一个plasma5,其他的自行安装
