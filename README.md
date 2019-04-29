@@ -141,10 +141,6 @@ i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ cloudpinyin libpinyi
 # 时区配置
 time.timeZone = "Asia/Shanghai";
 
-# 键盘布局
-services.xserver.layout = "de";
-services.xserver.xkbVariant = "neo";
-
 # 字体配置
 fonts = {
   fontconfig.enable = true;
