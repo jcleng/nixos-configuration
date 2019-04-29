@@ -134,6 +134,9 @@ i18n.inputMethod = {
   fcitx.engines = with pkgs.fcitx-engines; [ mozc hangul m17n ];
 };
 
+# fcitx拼音包
+i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ cloudpinyin libpinyin rime ];
+
 # 时区配置
 time.timeZone = "Asia/Shanghai";
 
