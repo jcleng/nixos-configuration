@@ -169,6 +169,14 @@ environment.systemPackages = with pkgs; [
 ## 安装软件
 > su命令行使用
 ```
+# 安装vscode
+# 先开启allowUnfree
+nixpkgs.config.allowUnfree = true;
+# 重新加载配置(重启)
+nixos-rebuild switch
+# 安装
+nix-env -i vscode
+
 # 安装软件(proxychains4是一个命令行使用代理的软甲,需要先安装)
 nix-env -i nodejs
 # proxychains4 nix-env -i nodejs
