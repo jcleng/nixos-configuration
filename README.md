@@ -62,15 +62,21 @@ sudo dd if=nix.iso of=/dev/sdc
 
 
 ## 配置说明 configuration.nix
+
 > 位置:安装之前`/mnt/etc/nixos/configuration.nix`,安装之后`/etc/nixos/configuration.nix`
+
 > [官方配置详解](https://nixos.org/nixos/manual/options.html)
+
 > 查看当前启动系统引导类型
+
 ```shell
 # 存在就是UEFI,不存在就是BIOS
 ls /sys/firmware/efi
 ```
 > 配置之后请`nixos-rebuild switch`默认设为默认选项,`nixos-rebuild test`不设为默认选项,重载配置,每一次配置之后就会生成一个grub引导,方便回滚
+
 > 基础配置
+
 ```config
 { config, pkgs, ... }: {
   imports = [
@@ -87,6 +93,7 @@ ls /sys/firmware/efi
 }
 ```
 > 常用配置
+
 ```
 # 有其他系统如win10,自动添加到grub
 boot.loader.grub.useOSProber = true;
@@ -196,8 +203,12 @@ environment.systemPackages = with pkgs; [
 nixos-rebuild switch
 ```
 ## 安装软件
+> [在线包查看](https://nixos.org/nixos/packages.html)
+
 > su命令行使用
 ```
+# 搜索
+nix-env -aqP | grep vscode
 # 安装vscode
 # 先开启allowUnfree
 nixpkgs.config = {
