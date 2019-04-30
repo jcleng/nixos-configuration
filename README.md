@@ -205,6 +205,12 @@ nixpkgs.config = {
   allowUnfree = true;
   allowBroken = true;
 };
+# 开启之后还要对单独的用户进行配置
+nano ~/.config/nixpkgs/config.nix
+{
+  allowUnfree = true;
+}
+
 # 重新加载配置(重启)
 nixos-rebuild switch
 # 安装
