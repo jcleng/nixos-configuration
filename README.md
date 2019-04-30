@@ -1,5 +1,31 @@
 # NixOS Linux(19.03) 配置安装教程
 
+```
+[jcleng@jcleng:~]$ neofetch
+          ::::.    ':::::     ::::'           jcleng@jcleng 
+          ':::::    ':::::.  ::::'            ------------- 
+            :::::     '::::.:::::             OS: NixOS 19.03.172361.cf3e277dd0b (Koi) x86_64 
+      .......:::::..... ::::::::              Host: N15_17RD 
+     ::::::::::::::::::. ::::::    ::::.      Kernel: 4.19.36 
+    ::::::::::::::::::::: :::::.  .::::'      Uptime: 9 mins 
+           .....           ::::' :::::'       Packages: 1373 (nix) 
+          :::::            '::' :::::'        Shell: bash 4.4.23 
+ ........:::::               ' :::::::::::.   Resolution: 1920x1080 
+:::::::::::::                 :::::::::::::   DE: KDE 
+ ::::::::::: ..              :::::            WM: KWin 
+     .::::: .:::            :::::             WM Theme: oxygen 
+    .:::::  :::::          '''''    .....     Theme: Breeze [KDE], Breeze [GTK3] 
+    :::::   ':::::.  ......:::::::::::::'     Icons: breeze [KDE], breeze [GTK3] 
+     :::     ::::::. ':::::::::::::::::'      Terminal: .konsole-wrappe 
+            .:::::::: '::::::::::             CPU: Intel i7-6700HQ (8) @ 3.500GHz 
+           .::::''::::.     '::::.            Memory: 1218MiB / 7898MiB 
+          .::::'   ::::.     '::::.
+         .::::      ::::      '::::.                                  
+
+
+
+```
+
 > [官方手册](https://nixos.org/nixos/manual/)
 
 > [Linux中国 知乎文章 NixOS Linux： 先配置后安装的 Linux](https://zhuanlan.zhihu.com/p/30286477)
