@@ -203,12 +203,14 @@ nixos-rebuild switch
 nixpkgs.config = {
   # 开启Unfree
   allowUnfree = true;
+  # 支持损坏的包
   allowBroken = true;
 };
 # 开启之后还要对单独的用户进行配置
 nano ~/.config/nixpkgs/config.nix
 {
   allowUnfree = true;
+  allowBroken = true;
 }
 
 # 重新加载配置(重启)
