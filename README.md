@@ -192,18 +192,6 @@ environment.systemPackages = with pkgs; [
   fcitx-configtool
 ];
 
-# 配置 Oh my ZSH
-# 配置文件位置 /etc/zshrc
-programs.zsh.ohMyZsh = {
-  enable = true;
-  plugins = [ "git" "python" "man" ];
-  theme = "bira";
-};
-programs.zsh.ohMyZsh.customPkgs = with pkgs; [
-  # zsh的插件
-  pkgs.nix-zsh-completions
-];
-
 # 修改配置之后必须
 nixos-rebuild switch
 ```
