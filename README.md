@@ -208,6 +208,7 @@ nixos-rebuild switch
 > su命令行使用
 ```
 # 搜索
+nix search wget
 nix-env -aqP | grep vscode
 # 安装vscode
 # 先开启allowUnfree
