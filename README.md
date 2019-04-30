@@ -105,7 +105,7 @@ wpa_passphrase wanlaimeng wanlaimeng168 > /etc/wpa_supplicant.conf
 ## restart服务
 systemctl restart wpa_supplicant.service
 
-# 有线网络管理,不同时使用networking.wireless
+# 有线网络管理,不同时使用networking.wireless,这个右下角会显示
 networking.networkmanager.enable = true;
 
 # 配置代理服务器
@@ -135,7 +135,7 @@ users.users.jcleng.password = "123456";
 # 主机名称
 networking.hostName = "jcleng";
 
-# 开启声音
+# 开启声音，这个右下角会显示
 sound.enable = true;
 hardware.pulseaudio.enable = true;
 
