@@ -207,7 +207,8 @@ nixos-rebuild switch
 
 > su命令行使用
 ```
-# 搜索
+# 搜索(-u生成缓存，搜索更快)
+nix search -u
 nix search wget
 nix-env -aqP | grep vscode
 # 安装vscode
