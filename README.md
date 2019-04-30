@@ -90,6 +90,16 @@ ls /sys/firmware/efi
 # 有其他系统如win10,自动添加到grub
 boot.loader.grub.useOSProber = true;
 
+# 配置wifi
+networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+## 生成wifi密钥配置，psk2的才支持自动生成
+wpa_passphrase wanlaimeng wanlaimeng168 > /etc/wpa_supplicant.conf
+## restart服务
+systemctl restart wpa_supplicant.service
+
+# 有线网络管理,不同时使用networking.wireless
+networking.networkmanager.enable = true;
+
 # 配置代理服务器
 # curl -o csnet https://csnet.aite.xyz/files/csnet_client/csnet_client_linux_amd64
 # chmod 777 ./csnet
@@ -97,10 +107,22 @@ boot.loader.grub.useOSProber = true;
 networking.proxy.default = "http://user:password@proxy:port/";
 networking.proxy.noProxy = "127.0.0.1,localhost";
 
-# 如果是虚拟机(QEMU/VM),请配置用户名和密码
+# 普通用户配置
 # 用户名:jcleng
 # 密码:123456
-users.users.jcleng.initialHashedPassword = "123456";
+# 用户使用nix配置,useradd等操作会在重启时失效
+users.mutableUsers = true;
+users.users.jcleng = {
+  isNormalUser = true;
+  home = "/home/jcleng";
+  description = "jcleng"; # 用户全名
+  extraGroups = [ "wheel" "networkmanager" ]; # root组和网络组
+  # openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
+};
+# 设置密码
+passwd jcleng
+# 如果登录失败，配置密码
+users.users.jcleng.password = "123456";
 
 # 主机名称
 networking.hostName = "jcleng";
@@ -122,6 +144,12 @@ services.xserver.windowManager.i3.enable = true;
 # 登录管理器,推荐使用第一个
 services.xserver.displayManager.sddm.enable = true;
 services.xserver.displayManager.slim.enable = true;
+
+# NVIDIA 显卡驱动
+services.xserver.videoDrivers = [ "nvidia" ];
+
+# 触摸板
+services.xserver.libinput.enable = true;
 
 # 地区配置
 i18n.supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
@@ -163,6 +191,8 @@ environment.systemPackages = with pkgs; [
   fcitx-configtool
 ];
 
+# 修改配置之后必须
+nixos-rebuild switch
 ```
 ## 安装软件
 > su命令行使用
@@ -186,21 +216,6 @@ nix-env -i nodejs
 # 整个系统回滚
 nixos-rebuild switch --rollback
 
-# 添加用户
-nano /etc/sudoers
-## 找到并修改取消注释
-## Allows people in group wheel to run all commands
-%wheel    ALL=(ALL)    ALL
-## add
-## User privilege specification
-root    ALL=(ALL:ALL) ALL
-jcleng ALL=(ALL:ALL) ALL
-## 新增用户
-useradd -m jcleng
-## 设置密码
-passwd jcleng
-## 使其属于root组,否则不能使用su *命令
-usermod -g root jcleng
 ```
 ## 升级
 ```
@@ -211,3 +226,4 @@ nix-channel --add https://nixos.org/channels/nixos-19.03 nixos
 # 升级到最新
 nixos-rebuild switch --upgrade
 ```
+
