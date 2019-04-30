@@ -192,6 +192,18 @@ environment.systemPackages = with pkgs; [
   fcitx-configtool
 ];
 
+# 配置 Oh my ZSH
+# 配置文件位置 /etc/zshrc
+programs.zsh.ohMyZsh = {
+  enable = true;
+  plugins = [ "git" "python" "man" ];
+  theme = "bira";
+};
+programs.zsh.ohMyZsh.customPkgs = with pkgs; [
+  # zsh的插件
+  pkgs.nix-zsh-completions
+];
+
 # 修改配置之后必须
 nixos-rebuild switch
 ```
@@ -213,6 +225,12 @@ nix-env -i vscode
 # 安装软件(proxychains4是一个命令行使用代理的软甲,需要先安装)
 nix-env -i nodejs
 # proxychains4 nix-env -i nodejs
+
+# 清除packages命令
+nix-collect-garbage
+
+# 查看已安装的包
+nix-env -qaP '*' --description
 
 # 整个系统回滚
 nixos-rebuild switch --rollback
