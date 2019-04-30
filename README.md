@@ -119,9 +119,9 @@ users.users.jcleng = {
   extraGroups = [ "wheel" "networkmanager" ]; # root组和网络组
   # openssh.authorizedKeys.keys = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
 };
-# 设置密码
-passwd jcleng
-# 如果登录失败，配置密码
+# 在命令行设置密码
+# passwd jcleng
+# 或者，配置密码
 users.users.jcleng.password = "123456";
 
 # 主机名称
