@@ -135,6 +135,10 @@ users.users.jcleng.password = "123456";
 # 主机名称
 networking.hostName = "jcleng";
 
+# 开启声音
+sound.enable = true;
+hardware.pulseaudio.enable = true;
+
 # 支持图形化请开启xserver服务
 services.xserver.enable = true;
 services.xserver.layout = "us";
