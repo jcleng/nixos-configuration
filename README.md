@@ -284,6 +284,12 @@ nix-channel --add https://nixos.org/channels/nixos-19.03 nixos
 # 升级到最新
 nixos-rebuild switch --upgrade
 ```
+### 搭建环境等
+```shell
+# 命令路径在`which php`(/home/jcleng/.nix-profile/bin/php)
+# /home/jcleng/.nix-profile/lib/openjdk
+nix-env -i openjdk neofetch php google-chrome gedit tilix tmux
+```
 > 感受
 ```
 # 确实带有nix-pkg包管理工具的发行版确实可以是一个好的发行版，但是对于想要编译安装的软件往往达不到理想的要求，太繁琐，门槛太高，何不在其他发行版安装nixpkg包管理工具呢
