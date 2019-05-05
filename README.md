@@ -283,6 +283,8 @@ nix-channel --list
 nix-channel --add https://nixos.org/channels/nixos-19.03 nixos
 # 升级到最新
 nixos-rebuild switch --upgrade
+# 很多时候下载会出现断开 --keep-going
+nix-env -i nodejs linux php openjdk --keep-going
 ```
 ### 搭建环境等
 ```shell
