@@ -296,3 +296,43 @@ nix-env -i openjdk neofetch php google-chrome gedit tilix tmux
 ```
 # 确实带有nix-pkg包管理工具的发行版确实可以是一个好的发行版，但是对于想要编译安装的软件往往达不到理想的要求，太繁琐，门槛太高，何不在其他发行版安装nixpkg包管理工具呢
 ```
+
+### 最近更新了清华源[清华 Nix 镜像使用帮助](https://mirrors.tuna.tsinghua.edu.cn/help/nix/)
+
+```shell
+# 我在ubuntu安装了nix包管理工具,国内源网络已经很快了
+
+# 单独安装的 Nix ,可执行目录
+~/.nix-profile/bin
+
+# 配置
+cat ~/.bash_profile
+export PATH="$PATH:/home/leng/.nix-profile/bin"
+
+# 缓存源地址修改
+cat ~/.config/nix/nix.conf
+substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store
+
+# 更新一下
+nix-channel --update
+
+# 确保在 nix show-config 命令结果中的substituters中,只有tsinghua源
+
+...省略
+substitute = true
+substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store
+...省略
+
+# 测试安装(可明确看到 from 'https://mirrors.tuna.tsinghua.edu.cn/' 即换源成功)
+nix-env -i hello
+
+# 安装完成即可执行
+hello
+# Hello, world!
+
+# 搜索软件
+nix-env -qa 'hello'
+nix-env -qa 'neofetch'
+# 安装
+nix-env -i neofetch
+```
