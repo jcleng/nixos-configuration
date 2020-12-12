@@ -336,3 +336,26 @@ nix-env -qa 'neofetch'
 # 安装
 nix-env -i neofetch
 ```
+
+- 更加详细的搜索&&安装
+
+```shell
+# 更加详细的搜索数据,(之前的搜索不能搜索到php73)参考博客 https://www.domenkozar.com/2014/01/02/getting-started-with-nix-package-manager/
+nix-env -qaP | grep php
+
+# 结果
+
+...
+
+nixpkgs.php73                                                            php-with-extensions-7.3.25
+nixpkgs.php                                                              php-with-extensions-7.4.13
+nixpkgs.php80                                                            php-with-extensions-8.0.0
+nixpkgs.php73Extensions.xdebug                                           php-xdebug-3.0.1
+nixpkgs.php74Extensions.xdebug                                           php-xdebug-3.0.1
+nixpkgs.php80Extensions.xdebug
+
+...
+
+# 安装php8(使用第二列的id名称)
+nix-env -i php-with-extensions-8.0.0
+```
