@@ -313,6 +313,13 @@ export PATH="$PATH:/home/leng/.nix-profile/bin"
 cat ~/.config/nix/nix.conf
 substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store
 
+cat ~/.config/nix/configuration.nix
+{
+  nixpkgs.config = {
+      allowUnfree = true;
+    };
+}
+
 # 更新一下
 nix-channel --update
 
