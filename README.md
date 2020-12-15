@@ -323,6 +323,11 @@ cat ~/.config/nix/configuration.nix
 # 更新一下
 nix-channel --update
 
+# 如果提示  SSL peer certificate or SSH remote key was not OK (60) 
+# 配置NIX_SSL_CERT_FILE环境变量值为/etc/ssl/certs/ca-bundle.crt 参考: https://github.com/NixOS/nixpkgs/issues/70939
+echo $NIX_SSL_CERT_FILE
+/etc/ssl/certs/ca-bundle.crt
+
 # 确保在 nix show-config 命令结果中的substituters中,只有tsinghua源
 
 ...省略
