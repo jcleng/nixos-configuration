@@ -301,7 +301,8 @@ nix-env -i openjdk neofetch php google-chrome gedit tilix tmux
 
 ```shell
 # 我在ubuntu安装了nix包管理工具,国内源网络已经很快了
-
+# 国内源帮助: https://mirrors.tuna.tsinghua.edu.cn/help/nix/
+nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixpkgs-unstable nixpkgs
 # 单独安装的 Nix ,可执行目录
 ~/.nix-profile/bin
 
