@@ -377,3 +377,57 @@ nix-env -i php-with-extensions-8.0.0
 export NIX_PATH=nixpkgs=/home/leng/.nix-defexpr/channels/nixpkgs
 echo $NIX_PATH
 ```
+
+#### 在macos上配置安装nix包管理工具
+
+```shell
+# 下载
+aria2c https://mirrors.tuna.tsinghua.edu.cn/nix/nix-2.3.9/nix-2.3.9-x86_64-darwin.tar.xz
+# 安装
+./install --darwin-use-unencrypted-nix-store-volume
+# 输入用户密码
+# 安装完成提示
+modifying /Users/jcleng/.bash_profile...
+modifying /Users/jcleng/.zshrc...
+Installation finished!  To ensure that the necessary environment
+variables are set, either log in again, or type
+
+  . /Users/jcleng/.nix-profile/etc/profile.d/nix.sh
+
+in your shell.
+# 重新登录或者执行
+sh /Users/jcleng/.nix-profile/etc/profile.d/nix.sh
+
+
+# 执行仍nix命令无效,请往下看,我这边是fish,这里nix默认只写入了.bash_profile和.zshrc,那么手动写入进fish,查看 nix.sh 里面的变量环境
+cat /Users/jcleng/.nix-profile/etc/profile.d/nix.sh
+
+# 有那些
+# NIX_LINK=$HOME/.nix-profile 基本路径
+export NIX_PATH=${NIX_PATH:+$NIX_PATH:}$HOME/.nix-defexpr/channels
+export NIX_PROFILES="/nix/var/nix/profiles/default $HOME/.nix-profile"
+export NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+export NIX_SSL_CERT_FILE=/etc/ssl/ca-bundle.pem
+export NIX_SSL_CERT_FILE="$NIX_LINK/etc/ca-bundle.crt"
+export MANPATH="$NIX_LINK/share/man:$MANPATH"
+export PATH="$NIX_LINK/bin:$PATH"
+
+# 编辑fish配置文件
+vim /Users/jcleng/.config/fish/conf.d/omf.fish
+
+
+# 对应新增
+set -x NIX_PATH /Users/jcleng/.nix-defexpr/channels
+set -x NIX_PROFILES /nix/var/nix/profiles/default /Users/jcleng/.nix-profile
+# 如果本机没有的话,就使用自带的
+set -x NIX_SSL_CERT_FILE /Users/jcleng/.nix-profile/etc/ssl/certs/ca-bundle.crt
+set -x MANPATH /Users/jcleng/.nix-profile/share/man $MANPATH
+# 最重要的可执行命令路径
+set -x PATH /Users/jcleng/.nix-profile/bin $PATH
+# 我之前已经有 PATH 了,那么直接追加一个
+set -x PATH /Users/jcleng/.nix-profile/bin /Users/jcleng/Downloads/flutter/bin /usr/local/axe/bin $PATH
+
+# 配置保存,然后fish重新打开, 再执行nix命令即可
+nix
+
+```
