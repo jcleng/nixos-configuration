@@ -374,7 +374,7 @@ nix-env -i php-with-extensions-8.0.0
 
 # 其他
 # 配置NIX_PATH变量环境
-export NIX_PATH=nixpkgs=/home/leng/.nix-defexpr/channels/nixpkgs
+export NIX_PATH=nixpkgs=/home/leng/.nix-defexpr/channels
 echo $NIX_PATH
 ```
 
