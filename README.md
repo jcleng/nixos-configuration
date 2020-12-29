@@ -430,4 +430,12 @@ set -x PATH /Users/jcleng/.nix-profile/bin /Users/jcleng/Downloads/flutter/bin /
 # 配置保存,然后fish重新打开, 再执行nix命令即可
 nix
 
+
+# 创建一个php71环境
+nix-env -p /nix/var/nix/profiles/per-user/leng/dev-php71 -i nix git
+# 切换当前环境
+nix-env --switch-profile /nix/var/nix/profiles/per-user/leng/dev-php71
+# 默认环境(重启shell生效)
+nix-env --switch-profile /nix/var/nix/profiles/per-user/leng/profile
+
 ```
