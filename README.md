@@ -439,3 +439,32 @@ nix-env --switch-profile /nix/var/nix/profiles/per-user/leng/dev-php71
 nix-env --switch-profile /nix/var/nix/profiles/per-user/leng/profile
 
 ```
+- 版本共存和回滚
+
+```shell
+# 多个版本共存
+## 先设置之前的为 active false, 否则提示(i.e., can’t have two active at the same time), 切换的话需执行这里2条命令即可
+nix-env --set-flag active false php-with-extensions-7.3.25
+nix-env --set-flag active true php-with-extensions-8.0.0
+# 切换,最好 false 在前
+nix-env --set-flag active false php-with-extensions-8.0.0
+nix-env --set-flag active true php-with-extensions-7.3.25
+
+## 然后再安装不同的版本
+nix-env --preserve-installed -i php-with-extensions-8.0.0
+
+# 查看记录
+nix-env --list-generations
+# 删除记录
+nix-env --delete-generations 3 4 8
+# 删除记录, 只保留5个
+nix-env --delete-generations +5
+# 删除30d前记录
+nix-env --delete-generations 30d
+# 删除所有 只保留current
+nix-env --delete-generations old
+# 回滚指定记录
+nix-env {--switch-generation | -G} {generation}
+# 回滚上一条记录
+nix-env --rollback
+```
