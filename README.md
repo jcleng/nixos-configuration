@@ -468,3 +468,18 @@ nix-env {--switch-generation | -G} {generation}
 # 回滚上一条记录
 nix-env --rollback
 ```
+
+- [镜像下载大文件频繁出错/断流](https://github.com/tuna/issues/issues/797#issuecomment-742458245)
+
+```shell
+# 可以换一个地址
+# 切换镜像地址
+nix-channel --add https://mirrors.bfsu.edu.cn/nix-channels/nixpkgs-unstable nixpkgs
+
+# 编辑源
+cat ~/.config/nix/nix.conf
+# substituters = https://mirrors.bfsu.edu.cn/nix-channels/store
+
+# 更新
+nix-channel --update
+```
