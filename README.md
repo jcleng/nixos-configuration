@@ -373,8 +373,8 @@ nixpkgs.php80Extensions.xdebug
 nix-env -i php-with-extensions-8.0.0
 
 # 其他
-# 配置NIX_PATH变量环境
-export NIX_PATH=nixpkgs=/home/leng/.nix-defexpr/channels
+# 配置NIX_PATH变量环境 配置之后才能nix search命令
+export NIX_PATH=/home/leng/.nix-defexpr/channels
 echo $NIX_PATH
 ```
 
