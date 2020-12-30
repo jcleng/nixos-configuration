@@ -483,3 +483,24 @@ cat ~/.config/nix/nix.conf
 # 更新
 nix-channel --update
 ```
+
+- 配置nix包镜像代理
+
+```shell
+# 代理机器安装nix-serve,运行:
+nix-serve -p 8080
+```
+
+```shell
+# 客户端编辑配置文件binary-caches设置为代理服务器的地址
+cat ~/.config/nix/nix.conf
+# substituters注释掉,修改为binary-caches
+# substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store
+binary-caches = http://192.168.1.91:8080/
+require-sigs = false
+
+# 保存之后执行
+# substituters配置已经是代理服务器的地址
+nix show-config
+nix-channel --update
+```
