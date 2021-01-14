@@ -376,6 +376,11 @@ nix-env -i php-with-extensions-8.0.0
 # 配置NIX_PATH变量环境 配置之后才能nix search命令
 export NIX_PATH=/home/leng/.nix-defexpr/channels
 echo $NIX_PATH
+
+# 安装search的包
+# * nixpkgs.xorg.xf86inputlibinput (xf86-input-libinput)
+
+nix-env -iA nixpkgs.xorg.xf86inputlibinput
 ```
 
 #### 在macos上配置安装nix包管理工具
