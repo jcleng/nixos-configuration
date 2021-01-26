@@ -545,4 +545,8 @@ cat ~/.config/nixpkgs/config.nix
 # nur包列表
 https://nur.nix-community.org/repos/izorkin/
 
+# 搜索
+http://nur.nix-community.org/repos/
+# php相关
+http://nur.nix-community.org/repos/izorkin/
 ```
