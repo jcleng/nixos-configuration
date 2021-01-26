@@ -509,3 +509,40 @@ require-sigs = false
 nix show-config
 nix-channel --update
 ```
+
+- nur使用
+
+```shell
+# 格式化.nix文件插件`jnoortheen.nix-ide` `bbenoist.nix`(vscode)
+# .nix文件换行符号用lf
+nix-env -iA nixpkgs.nixpkgs-fmt
+
+# 前提安装proxychains4来走proxy
+nix-env -iA nixpkgs.proxychains
+# 配置 /etc/proxychains4.conf
+socks5  127.0.0.1 54321
+# 测试
+proxychains4 curl google.com
+# 别名 vim ~/.config/fish/config.fish
+alias nix-env='proxychains4 nix-env'
+alias nix='proxychains4 nix'
+alias nix-channel='proxychains4 nix-channel'
+
+
+# 使用NUR
+https://github.com/nix-community/NUR
+
+cat ~/.config/nixpkgs/config.nix
+
+{
+  packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+  };
+}
+
+# nur包列表
+https://nur.nix-community.org/repos/izorkin/
+
+```
