@@ -542,6 +542,8 @@ cat ~/.config/nixpkgs/config.nix
   };
 }
 
+# 测试安装nur.repos.mic92.hello-nur
+nix-env -f '<nixpkgs>' -iA nur.repos.mic92.hello-nur
 # nur包列表
 https://nur.nix-community.org/repos/izorkin/
 
@@ -549,4 +551,6 @@ https://nur.nix-community.org/repos/izorkin/
 http://nur.nix-community.org/repos/
 # php相关
 http://nur.nix-community.org/repos/izorkin/
+# 安装php71
+nix-env -f '<nixpkgs>' -iA nur.repos.izorkin.php71
 ```
