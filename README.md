@@ -553,4 +553,6 @@ http://nur.nix-community.org/repos/
 http://nur.nix-community.org/repos/izorkin/
 # 安装php71
 nix-env -f '<nixpkgs>' -iA nur.repos.izorkin.php71
+
+# 注意在wsl上可能会遇到安装无法使用busybox的情况,导致busybox的命令都无法使用 https://github.com/nix-community/NUR/issues/319
 ```
