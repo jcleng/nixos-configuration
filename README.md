@@ -555,4 +555,27 @@ http://nur.nix-community.org/repos/izorkin/
 nix-env -f '<nixpkgs>' -iA nur.repos.izorkin.php71
 
 # 注意在wsl上可能会遇到安装无法使用busybox的情况,导致busybox的命令都无法使用 https://github.com/nix-community/NUR/issues/319
+
+
+# nur或者直接添加仓库的channel
+nix-channel --add https://github.com/nix-community/NUR/archive/master.tar.gz nur
+
+# 有的aur包已经提供了cachix,使用cachix use添加缓存仓库
+nix-env -iA nixpkgs.cachix
+# https://github.com/Izorkin/nur-packages
+cachix use izorkin
+# https://github.com/fossar/nix-phps
+cachix use fossar
+# nix-community
+cachix use nix-community
+# 使用cachix use命令之后,会提示已经修改了~/.config/nix/nix.conf配置文件
+cat ~/.config/nix/nix.conf
+
+substituters = https://cache.nixos.org https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://izorkin.cachix.org https://nix-community.cachix.org
+trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= fossar.cachix.org-1:Zv6FuqIboeHPWQS7ysLCJ7UT7xExb4OE8c4LyGb5AsE= izorkin.cachix.org-1:hwG3g4ZCbuC1eOZjGtQ/ESxwBxigCHs205Kz1iuMiJA= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+
+nix-env -f '<nixpkgs>' -iA nur.repos.mic92.hello-nur 会直接看到:
+
+nix-env -f '<nixpkgs>' -iA nur.repos.mic92.hello-nur...
+....
 ```
