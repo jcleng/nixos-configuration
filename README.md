@@ -455,6 +455,12 @@ nix-env --set-flag active true php-with-extensions-8.0.0
 nix-env --set-flag active false php-with-extensions-8.0.0
 nix-env --set-flag active true php-with-extensions-7.3.25
 
+# nur切换
+ls -l /home/jcleng/.nix-profile/bin/php
+# lrwxrwxrwx 1 jcleng jcleng 62 Jan  1  1970 /home/jcleng/.nix-profile/bin/php -> /nix/store/499zg22sagzbbg27z5hlb466qpj88va6-php-7.1.33/bin/php*
+nix-env --set-flag active false php-7.1.33
+nix-env --set-flag active true php-7.1.33
+
 ## 然后再安装不同的版本
 nix-env --preserve-installed -i php-with-extensions-8.0.0
 
