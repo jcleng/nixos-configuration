@@ -302,6 +302,7 @@ nix-env -i openjdk neofetch php google-chrome gedit tilix tmux
 ```shell
 # 我在ubuntu安装了nix包管理工具,国内源网络已经很快了
 # 国内源帮助: https://mirrors.tuna.tsinghua.edu.cn/help/nix/
+# ustc源 https://mirrors.ustc.edu.cn/nix-channels/store
 nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixpkgs-unstable nixpkgs
 # 单独安装的 Nix ,可执行目录
 ~/.nix-profile/bin
@@ -576,7 +577,7 @@ cachix use izorkin
 cachix use fossar
 # nix-community
 cachix use nix-community
-# 使用cachix use命令之后,会提示已经修改了~/.config/nix/nix.conf配置文件
+# 使用cachix use命令之后,会提示已经修改了~/.config/nix/nix.conf配置文件, https://cache.nixos.org 这个可以修改为国内源(删除)
 cat ~/.config/nix/nix.conf
 
 substituters = https://cache.nixos.org https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://izorkin.cachix.org https://nix-community.cachix.org
