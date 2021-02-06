@@ -316,10 +316,18 @@ cat ~/.config/nix/nix.conf
 substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store
 
 cat ~/.config/nixpkgs/config.nix
+
 {
-  nixpkgs.config = {
-      allowUnfree = true;
-    };
+  allowUnfree = true;
+  allowBroken = true;
+  allowUnsupportedSystem = true;
+  allowInsecurePredicate = (pkg: true);
+  allowUnfreePredicate = (pkg: false);
+  #packageOverrides = pkgs: {
+  #  nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+  #    inherit pkgs;
+  #  };
+  #};
 }
 
 # 更新一下
