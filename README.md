@@ -315,7 +315,7 @@ export PATH="$PATH:/home/leng/.nix-profile/bin"
 cat ~/.config/nix/nix.conf
 substituters = https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store
 
-cat ~/.config/nix/configuration.nix
+cat ~/.config/nixpkgs/config.nix
 {
   nixpkgs.config = {
       allowUnfree = true;
