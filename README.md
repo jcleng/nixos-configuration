@@ -124,12 +124,10 @@ ls /sys/firmware/efi
 # 有其他系统如win10,自动添加到grub
 boot.loader.grub.useOSProber = true;
 
-# 配置wifi
-networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-## 生成wifi密钥配置，psk2的才支持自动生成
-wpa_passphrase wanlaimeng wanlaimeng168 > /etc/wpa_supplicant.conf
-## restart服务
-systemctl restart wpa_supplicant.service
+# 配置wifi,networkmanager二选一, 推荐networkmanager
+# networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+## 运行命令生成wifi密钥配置，psk2的才支持自动生成: wpa_passphrase wanlaimeng wanlaimeng168 > /etc/wpa_supplicant.conf
+## 如果是在cli连接wifi,自动生成密码之后,  restart服务 systemctl restart wpa_supplicant.service
 
 # 有线网络管理,不同时使用networking.wireless,这个右下角会显示
 networking.networkmanager.enable = true;
@@ -169,19 +167,19 @@ hardware.pulseaudio.enable = true;
 services.xserver.enable = true;
 services.xserver.layout = "us";
 
-# 开启xserver服务之后才能使桌面环境,镜像里面带有plasma5,那就开启第一个plasma5,其他的自行安装
+# 开启xserver服务之后才能使桌面环境,镜像里面带有plasma5(安装的时候直接从local获取不下载,快一点),那就开启第一个plasma5,其他的自行安装
 services.xserver.desktopManager.plasma5.enable = true;
-services.xserver.desktopManager.xfce.enable = true;
-services.xserver.desktopManager.gnome3.enable = true;
-services.xserver.desktopManager.mate.enable = true;
-services.xserver.windowManager.xmonad.enable = true;
-services.xserver.windowManager.twm.enable = true;
-services.xserver.windowManager.icewm.enable = true;
-services.xserver.windowManager.i3.enable = true;
+# services.xserver.desktopManager.xfce.enable = true;
+# services.xserver.desktopManager.gnome3.enable = true;
+# services.xserver.desktopManager.mate.enable = true;
+# services.xserver.windowManager.xmonad.enable = true;
+# services.xserver.windowManager.twm.enable = true;
+# services.xserver.windowManager.icewm.enable = true;
+# services.xserver.windowManager.i3.enable = true;
 
 # 登录管理器,推荐使用第一个
 services.xserver.displayManager.sddm.enable = true;
-services.xserver.displayManager.slim.enable = true;
+# services.xserver.displayManager.slim.enable = true;
 
 # NVIDIA 显卡驱动
 services.xserver.videoDrivers = [ "nvidia" ];
@@ -192,8 +190,8 @@ services.xserver.libinput.enable = true;
 # 地区配置
 i18n.supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
 i18n.defaultLocale = "zh_CN.UTF-8";
+# 如果是 21.05版本+ 是 i18n.console = { KeyMap = "us" }
 i18n.consoleKeyMap = "us";
-
 # Fcitx输入法
 i18n.inputMethod = {
   enabled = "fcitx";
@@ -231,6 +229,12 @@ environment.systemPackages = with pkgs; [
 
 # 修改配置之后必须
 nixos-rebuild switch
+
+
+### 安装21.05版本出现 /nix/store/...: No such file or directory issues: https://github.com/NixOS/nixpkgs/issues/126141
+# 这样处理: https://github.com/NixOS/nixpkgs/issues/126141#issuecomment-877883570
+sudo nix-build '<nixpkgs/nixos>' -A config.system.build.toplevel -I nixos-config=/mnt/etc/nixos/configuration.nix
+sudo nixos-install
 ```
 ## 安装软件
 > [在线包查看](https://nixos.org/nixos/packages.html)
