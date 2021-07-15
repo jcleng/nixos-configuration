@@ -568,6 +568,9 @@ https://nur.nix-community.org/repos/izorkin/
 
 # 搜索
 http://nur.nix-community.org/repos/
+## 配置~/.config/nixpkgs/config.nix文件之后使用 -f '<nixpkgs>' 搜索
+nix search php71 -f '<nixpkgs>' -u
+
 # php相关
 http://nur.nix-community.org/repos/izorkin/
 # 安装php71
