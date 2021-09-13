@@ -308,6 +308,9 @@ nix-env -i openjdk neofetch php google-chrome gedit tilix tmux
 # 国内源帮助: https://mirrors.tuna.tsinghua.edu.cn/help/nix/
 # ustc源 https://mirrors.ustc.edu.cn/nix-channels/store
 nix-channel --add https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixpkgs-unstable nixpkgs
+nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixos-21.05/ nixos
+# nix-channel --add https://mirrors.ustc.edu.cn/nix-channels/nixpkgs-21.05-darwin/ darwin
+
 # 单独安装的 Nix ,可执行目录
 ~/.nix-profile/bin
 
