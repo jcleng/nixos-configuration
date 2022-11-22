@@ -47,7 +47,6 @@ sudo dd if=nix.iso of=/dev/sdc bs=4M conv=fsync
 * 启动进入命令行,默认是root用户
 * 用户名`root`密码为空
 * `Alt+F8`或者输入`nixos-help`显示自带手册文档,`Ctrl-z`退出
-* `systemctl start display-manager`等待进入KED(虚拟机的话很慢),`loadkeys`切换键盘布局,neo2布局直接输入`loadkeys de neo`
 
 ## 网络
 * 网络必须要配置通,默认打开kde桌面环境是已经自动连接网络了的,安装过程需要下载文件,查看状态`ip a`,手动配置网络`ifconfig`来配置,这里不做多介绍
