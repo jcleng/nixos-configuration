@@ -41,7 +41,7 @@
 > 烧写图形版nixos-graphical镜像到U盘
 > 在linux里面
 ```shell
-sudo dd if=nix.iso of=/dev/sdc
+sudo dd if=nix.iso of=/dev/sdc bs=4M conv=fsync
 ```
 * 默认的启动项进不去就可以试一试第二个选项(nomodeset)
 * 启动进入命令行,默认是root用户
