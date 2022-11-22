@@ -1,26 +1,27 @@
-# NixOS Linux(19.03) 配置安装教程
+# NixOS 22.05 (Quokka) 配置安装教程
 
 ```
 [jcleng@jcleng:~]$ neofetch
-          ::::.    ':::::     ::::'           jcleng@jcleng 
-          ':::::    ':::::.  ::::'            ------------- 
-            :::::     '::::.:::::             OS: NixOS 19.03.172361.cf3e277dd0b (Koi) x86_64 
-      .......:::::..... ::::::::              Host: N15_17RD 
-     ::::::::::::::::::. ::::::    ::::.      Kernel: 4.19.36 
-    ::::::::::::::::::::: :::::.  .::::'      Uptime: 9 mins 
-           .....           ::::' :::::'       Packages: 1373 (nix) 
-          :::::            '::' :::::'        Shell: bash 4.4.23 
- ........:::::               ' :::::::::::.   Resolution: 1920x1080 
-:::::::::::::                 :::::::::::::   DE: KDE 
- ::::::::::: ..              :::::            WM: KWin 
-     .::::: .:::            :::::             WM Theme: oxygen 
-    .:::::  :::::          '''''    .....     Theme: Breeze [KDE], Breeze [GTK3] 
-    :::::   ':::::.  ......:::::::::::::'     Icons: breeze [KDE], breeze [GTK3] 
-     :::     ::::::. ':::::::::::::::::'      Terminal: .konsole-wrappe 
-            .:::::::: '::::::::::             CPU: Intel i7-6700HQ (8) @ 3.500GHz 
-           .::::''::::.     '::::.            Memory: 1218MiB / 7898MiB 
-          .::::'   ::::.     '::::.
-         .::::      ::::      '::::.                                  
+          ▗▄▄▄       ▗▄▄▄▄    ▄▄▄▖            jcleng@nixos 
+          ▜███▙       ▜███▙  ▟███▛            ------------ 
+           ▜███▙       ▜███▙▟███▛             OS: NixOS 22.05 (Quokka) x86_64 
+            ▜███▙       ▜██████▛              Host: LENOVO 20FRS0UM00 
+     ▟█████████████████▙ ▜████▛     ▟▙        Kernel: 5.15.79 
+    ▟███████████████████▙ ▜███▙    ▟██▙       Uptime: 23 hours, 10 mins 
+           ▄▄▄▄▖           ▜███▙  ▟███▛       Packages: 2076 (nix-system), 526 (nix-user), 19 (flatpak) 
+          ▟███▛             ▜██▛ ▟███▛        Shell: bash 5.1.16 
+         ▟███▛               ▜▛ ▟███▛         Resolution: 2560x1440 
+▟███████████▛                  ▟██████████▙   DE: Plasma 
+▜██████████▛                  ▟███████████▛   WM: KWin 
+      ▟███▛ ▟▙               ▟███▛            Theme: Breeze [GTK3] 
+     ▟███▛ ▟██▙             ▟███▛             Icons: breeze [GTK2/3] 
+    ▟███▛  ▜███▙           ▝▀▀▀▀              Terminal: .konsole-wrappe 
+    ▜██▛    ▜███▙ ▜██████████████████▛        CPU: Intel i5-6300U (4) @ 3.000GHz 
+     ▜▛     ▟████▙ ▜████████████████▛         GPU: Intel Skylake GT2 [HD Graphics 520] 
+           ▟██████▙       ▜███▙               Memory: 5508MiB / 7825MiB 
+          ▟███▛▜███▙       ▜███▙
+         ▟███▛  ▜███▙       ▜███▙                                     
+         ▝▀▀▀    ▀▀▀▀▘       ▀▀▀▘                                     
 
 
 
@@ -55,36 +56,48 @@ sudo dd if=nix.iso of=/dev/sdc
 * 没有图形化界面连接wifi,查看网卡名`ip a`,连接`wpa_supplicant -B -i 网卡名 -c <(wpa_passphrase 'wifi名' 'wifi密码')`
 
 ## 分区安装盘
-* 查看挂载的磁盘`lsblk`
-* 转换硬盘gpt格式`parted /dev/sda -- mklabel gpt`
-* 查看是否是gpt,`fdisk -l`
-* 注意: parted请谨慎操作,会格式化C盘
-* 只要两个分区EFI和/主分区即可安装
-* 创建efi分区,前面预留512M EFI分区,后面留8GB(用作swap分区,也可以直接-1MiB不要swap分区,视情况而定),创建sda1系统主分区
-`parted /dev/sda -- mkpart primary 512MiB -8GiB`
-* 查看分区情况`lsblk -a`,多出sda1,sda1 = 全部大小 - 512M - 8G(1MiB)
-* 修正格式EFI分区`parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB`
-* 查看分区情况`lsblk -a`,多出sda2
-* 设置EFI分区为boot分区,`parted -l`查看EFI编号(Number)
-* parted /dev/sda -- set 编号 boot on
-* 删除分区,进入`parted`命令,里面打印`print`,获取到编号,使用`rm 编号`,删除分区,`Ctrl-c`退出parted
+* 磁盘分区,这次全部使用lvm不再使用btrfs,使用多年的btrfs不再推荐了,个人机器还是不使用
+* 创建lvm,我只用vda2作为根分区
 
-## 格式化安装盘
-* 主分区是ext4格式`mkfs.ext4 -L nixos /dev/sda1`
-* EFI是fat格式`mkfs.fat -F 32 -n boot /dev/sda2`
-* swap是swap格式(没有就略过)`mkswap -L swap /dev/sda3`
-* 进入`parted`命令,里面打印`print`,查看File system
+```shell
+pvcreate /dev/vda2
+vgcreate vgroot /dev/vda2
+lvcreate -l +100%FREE vgroot -n lvroot
+mkfs.ext4 /dev/mapper/vgroot-lvroot
+mount /dev/mapper/vgroot-lvroot /mnt
+```
+* uefi需要挂在boot分区
 
-## 安装系统
-* 挂载分区`mount /dev/disk/by-label/nixos /mnt`或者`mount /dev/sda1 /mnt`
-* 挂载EFI引导分区`mkdir -p /mnt/boot`,`mount /dev/disk/by-label/boot /mnt/boot`或者`mount /dev/sda2 /mnt/boot`
-* 开启swap`swapon /dev/sda3`
-* 现在需要一个配置文件,来配置系统安装默认安装的数据以及安装配置`/mnt/etc/nixos/configuration.nix`
-* 创建配置`nixos-generate-config --root /mnt`
-* 编辑`nano /mnt/etc/nixos/configuration.nix`
+```shell
+mount /dev/vda1 /mnt/boot
+```
+* 配置文件生成
 
-* 开始安装`nixos-install`
-* 等待,完成之后`reboot`
+```shell
+nixos-generate-config --root /mnt/
+```
+* 编辑映射到对应/dev/mapper/
+
+```shell
+nano /mnt/etc/nixos/hardware-configuration.nix
+```
+* 常规修改配置
+
+```shell
+nano /mnt/etc/nixos/configuration.nix
+```
+* 安装
+
+```shell
+nixos-install --root /mnt
+```
+
+* chroot进系统改普通用户密码
+
+```shell
+nix-enter --root /mnt
+```
+
 
 
 ## 配置说明 configuration.nix
