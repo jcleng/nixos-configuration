@@ -625,3 +625,18 @@ copying path '/nix/store/k7yvdrvf0vzl27gmfqvi2ya3r2qgbz20-php-7.1.33-debug' from
 ...
 
 ```
+
+- 引导配置,原文
+
+```nix
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  # boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  # Define on which hard drive you want to install Grub.
+  # 传统模式(比如服务器上),efi设置nodev
+  boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
+
+```
