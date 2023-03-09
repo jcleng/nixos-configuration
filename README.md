@@ -1,4 +1,4 @@
-# NixOS 22.11 (Quokka) 配置安装教程
+# NixOS 22.11 (Raccoon) 配置安装教程
 
 ```
 ┌💁  jcleng @ 💻  nixos in 📁  caddy-pl on 🌿  main •1 ✗
