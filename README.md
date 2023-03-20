@@ -29,16 +29,6 @@
 
 ```
 
-> [官方手册](https://nixos.org/nixos/manual/)
-
-> [Linux中国 知乎文章 NixOS Linux： 先配置后安装的 Linux](https://zhuanlan.zhihu.com/p/30286477)
-
-> [官方下载页面](https://nixos.org/nixos/download.html)
-
-> [softpedia下载地址](https://linux.softpedia.com/get/System/Operating-Systems/Linux-Distributions/NixOS-27710.shtml)
-
-> 推荐先安装`Internet Download Manager (IDM)`多线程下载,下载更快一些
-
 ## 启动镜像进入图形化界面
 > 烧写图形版nixos-graphical镜像到U盘
 > 在linux里面
@@ -56,32 +46,61 @@ sudo dd if=nix.iso of=/dev/sdc bs=4M conv=fsync
 * 如需使用ssh,开启ssh守护进程`systemctl start sshd`
 * 没有图形化界面连接wifi,查看网卡名`ip a`,连接`wpa_supplicant -B -i 网卡名 -c <(wpa_passphrase 'wifi名' 'wifi密码')`
 
-## 分区安装盘
-* 磁盘分区,这次全部使用lvm不再使用btrfs,使用多年的btrfs不再推荐了,个人机器还是不使用
-* 创建lvm,我只用vda2作为根分区
+## 分区安装盘,换了个1tb的固态,全部使用ext4(由lvm和btrfs切换回来)
 
 ```shell
-pvcreate /dev/vda2
-vgcreate vgroot /dev/vda2
-lvcreate -l +100%FREE vgroot -n lvroot
-mkfs.ext4 /dev/mapper/vgroot-lvroot
-mount /dev/mapper/vgroot-lvroot /mnt
-```
-* uefi需要挂在boot分区
+# 查看挂载的磁盘
+lsblk
 
-```shell
-mount /dev/vda1 /mnt/boot
+# parted请谨慎操作,会格式化磁盘
+# 转换硬盘gpt格式
+parted /dev/nvme0n1 -- mklabel gpt
+# 查看是否是gpt,查看Disklabel type类型
+fdisk -l
+
+# 只要两个分区EFI和/主分区即可安装,其实就是运行parted /dev/nvme0n1命令,然后按照提示进行一步一步操作即可; 分区名称,分区类型,起点,终点
+
+parted /dev/nvme0n1 -- mkpart uefi_esp fat32 1MiB 512MiB
+parted /dev/nvme0n1 -- mkpart primary_ext ext4 512MiB -1MiB
+
+# 查看分区情况
+lsblk -a
+# 设置启动分区, 先查看EFI编号(Number),再执行,应该就是1
+parted -l
+parted /dev/nvme0n1 -- set 编号 boot on
+# 查看分区信息,能看到efi分区的Flags是[boot, esp]
+parted -l
+
+
+# 开始格式化分区
+# efi分区格式化为fat32
+mkfs.fat -F 32 /dev/nvme0n1p1
+# 主分区全部格式化为ext4
+mkfs.ext4 -L nixos /dev/nvme0n1p2
+
+# 查看结果,File列里面
+parted -l
+
+# uefi类型挂载
+mount /dev/nvme0n1p2 /mnt
+mkdir -p /mnt/boot
+mount /dev/nvme0n1p1 /mnt/boot
+
+
+# 转移原来的sda1分区所有/下文件
+mkdir /old/mnt
+mount /dev/sda1 /old/mnt
+cp -aR /old/mnt /
+# 注意重新修改挂载点
+vi /mnt/etc/nixos/hardware-configuration.nix
 ```
+
 * 配置文件生成
 
 ```shell
 nixos-generate-config --root /mnt/
 ```
-* 编辑映射到对应/dev/mapper/
 
-```shell
-nano /mnt/etc/nixos/hardware-configuration.nix
-```
 * 常规修改配置
 
 ```shell
