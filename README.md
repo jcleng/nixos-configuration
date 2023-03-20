@@ -88,7 +88,7 @@ mount /dev/nvme0n1p1 /mnt/boot
 
 
 # 转移原来的sda1分区所有/下文件
-mkdir /old/mnt
+mkdir -p /old/mnt
 mount /dev/sda1 /old/mnt
 cp -aR /old/mnt /
 # 注意重新修改挂载点
