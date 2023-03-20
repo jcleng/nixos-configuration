@@ -95,6 +95,48 @@ cp -aR /old/mnt /
 vi /mnt/etc/nixos/hardware-configuration.nix
 ```
 
+## 虚拟机安装,通常不是uefi启动
+
+```shell
+# 查看挂载的磁盘
+lsblk
+
+# parted请谨慎操作,会格式化磁盘
+# 转换硬盘msdos格式
+parted /dev/sdb
+mklabel msdos
+q
+# 查看是否是gpt,查看Disklabel type类型
+fdisk -l
+
+# 只要一个主分区
+parted /dev/sdb
+mkpart primary
+ext4
+1MiB
+-1MiB
+q
+
+# 查看分区情况
+lsblk -a
+
+# 开始格式化分区
+mkfs.ext4 -L nixos /dev/sdb1
+
+# 查看结果,File列里面
+parted -l
+
+# 挂载
+mount /dev/sdb1 /mnt
+
+# 查看
+lsblk
+
+# 配置文件修改引导盘: /mnt/etc/nixos/configuration.nix
+boot.loader.grub.device = "/dev/sdb"; # or "nodev" for efi only
+```
+
+
 * 配置文件生成
 
 ```shell
