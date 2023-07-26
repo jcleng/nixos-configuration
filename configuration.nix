@@ -6,201 +6,111 @@
 
 {
   imports =
-    [
-      # Include the results of the hardware scan.
+    [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
+  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.grub.theme = pkgs.nixos-grub2-theme;
-  # networking.hostName = "nixos"; # Define your hostname.
-  # Pick only one of the below networking options.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
-  # Set your time zone.
-  time.timeZone = "Asia/Shanghai";
+  networking.hostName = "nixos"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  # Enable networking
+  networking.networkmanager.enable = true;
+
+  # Set your time zone.
+  time.timeZone = "Asia/Shanghai";
+
   # Select internationalisation properties.
   i18n.defaultLocale = "zh_CN.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkbOptions in tty.
-  # };
-  # Fcitx输入法
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    # enabled = "ibus";
-  };
 
-  # fcitx拼音包
-  i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ libpinyin rime ];
-  i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-rime ];
-  i18n.inputMethod.fcitx5.enableRimeData = true;
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "zh_CN.UTF-8";
+    LC_IDENTIFICATION = "zh_CN.UTF-8";
+    LC_MEASUREMENT = "zh_CN.UTF-8";
+    LC_MONETARY = "zh_CN.UTF-8";
+    LC_NAME = "zh_CN.UTF-8";
+    LC_NUMERIC = "zh_CN.UTF-8";
+    LC_PAPER = "zh_CN.UTF-8";
+    LC_TELEPHONE = "zh_CN.UTF-8";
+    LC_TIME = "zh_CN.UTF-8";
+  };
+  i18n.inputMethod.enabled="fcitx5";
+  i18n.inputMethod.fcitx5.addons=with pkgs; [
+    fcitx5-rime
+    libsForQt5.fcitx5-qt
+    fcitx5-gtk
+  ];
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-
-  # Enable the Plasma 5 Desktop Environment.
+  # Enable the KDE Plasma Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-  #i3
-  services.xserver.windowManager.i3.enable = true;
 
   # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = {
-  #   "eurosign:e";
-  #   "caps:escape" # map caps to escape.
-  # };
+  services.xserver = {
+    layout = "cn";
+    xkbVariant = "";
+  };
 
   # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.printing.enable = true;
 
-  # Enable sound.
+  # Enable sound with pipewire.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
-  nix.settings.trusted-users = [ "root" "jcleng" ];
+  # services.xserver.libinput.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jcleng = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    description = "jcleng";
+    extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
-      #     thunderbird
+      kate
+    #  thunderbird
     ];
   };
+
+  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.permittedInsecurePackages = [
-    "libdwarf-20181024"
-  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
-    # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    # wget
-    # firefox
-    nano
-    zsh
-    # fcitx5-configtool
-    # fcitx5-with-addons
-    # fcitx5-chinese-addons
-    #
-    aria2
-    ark
-    # etcher
-    gerbera
-    git
-    gparted
-    groff
-    libreoffice
-    lsd
-    neofetch
-    okular
-    vscode
-    chromium
-    vlc
-    mpv
-    clash
-    gimp
-    htop
-    wqy_microhei
-    wqy_zenhei
-    fira-code
-    # latte-dock
-    # source-han-sans-simplified-chinese
-    appimage-run
-    docker-compose
-    # google-chrome
-    # wine
-    # xface dock
-    # plank
-    # 快捷打开
-    # albert
-    # xfce.xfwm4-themes
-    # xfce.xfce4-icon-theme
-    # elementary-xfce-icon-theme
-    # micro
-    android-tools
-    # wezterm
-    neovim
-
-    # redis-desktop-manager
-    # gammy
-    # lite-xl
-    obs-studio
-    kdeconnect
-    noto-fonts-emoji
-    # vivaldi
-    # vivaldi-ffmpeg-codecs
-    # vivaldi-widevine
-    ibus-theme-tools
-    firefox-devedition-bin-unwrapped
-    # dbeaver
-    # jdk17
-    # openjdk17
-    jdk11
-    php80
-    jetbrains-mono
-    # vagrant
-    arandr
-    ntfs3g
-    tmux
-    tree
-    bpytop
-    nodejs-16_x
-    # winetricks
-    # nwjs
-    # x11docker
-    # tini
-    xorg.xhost
-    unzip
-    # partition-manager
-    filelight
-    # microsoft-edge
-    cmatrix
-    # geekbench
-    pciutils
-    lazydocker
-    # termius
-    flatpak-builder
-    p7zip
-    unrar-wrapper
-    gpick
-    # mars-mips
-    virt-manager
-    nixpkgs-fmt
-    usbutils
-    file
-    inetutils
-    #nvtop-amd
-    #linuxPackages.amdgpu-pro
-    minikube
-    kubectl
-    bridge-utils
-    # hostapd
-    bind
-    wireshark
-    scrcpy
-    alacritty
-    ttyd
-    youtube-dl
-    # vivaldi
-    go
-    # xcaddy
+   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+   wget
+   source-han-sans
+   neofetch
+   jetbrains-mono
+   git
+   htop
+   ntfs3g
+   xorg.xev
+   xorg.xmodmap
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -222,72 +132,45 @@
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
 
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.05"; # Did you read the comment?
-  # flatpak
-  services.flatpak.enable = true;
+  system.stateVersion = "23.05"; # Did you read the comment?
+ 
+  services.flatpak.enable=true;
+  hardware.bluetooth.enable=true;
+  environment.extraInit="
+export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share/
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export SDL_IM_MODULE=fcitx
+export GLFW_IM_MODULE=ibus
+export DOCKER_HOST=tcp://0.0.0.0:39012
+";
+
+
+services.xserver.displayManager.sddm.settings={
+   X11={
+      ServerArguments="-dpi 192";
+   };
+};
+
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true;
-  # 修改为下面: virtualisation.docker.extraOptions = "-H tcp://0.0.0.0:39012";
   virtualisation.docker.daemon.settings = {
-    hosts = [
-      "0.0.0.0:39012"
-    ];
-    registry-mirrors = [
-      "https://dockerproxy.com"
-    ];
+   hosts = [
+     "0.0.0.0:39012"
+   ];
   };
-  virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.onBoot = "start";
-  # virtualisation.libvirtd.allowedBridges=[
-  #   "virbr0"
-  #   "br0"
-  # ];
-  # networking.bridges = {
-  #   br0 = {
-  #     interfaces = [
-  #       "wlp4s0"
-  #     ];
-  #   };
-  # };
-  #services.jellyfin.enable = true;
-  #services.jellyfin.user = "jcleng";
+  programs.kdeconnect.enable=true;
 
-  virtualisation.podman.enable = true;
 
-  # virtualisation.virtualbox.host.enable = true;
-  # virtualisation.virtualbox.guest.enable = true;
-  # 支持usb的扩展包
-  # virtualisation.virtualbox.host.enableExtensionPack = true;
 
-  networking.hosts = {
-    "116.204.106.129" = [ "www.xxx.icu" ];
-  };
-  programs.sway.enable = true;
-  # virtualisation.anbox.enable = true;
-  services.code-server.enable = true;
-  services.code-server.host = "0.0.0.0";
-  services.code-server.port = 8187;
-  services.code-server.hashedPassword = "$argon2id$v=19$m=102400,t=2,p=8$tSm+xxxxxxxxx/g44K5fQ$WDyus6py50bVFIPkjA28lQ";
-  services.code-server.user = "jcleng";
-  services.code-server.group = "users";
 
-  # Enable cron service
-  services.cron = {
-    enable = true;
-    systemCronJobs = [
-      "*/1 * * * * jcleng date >> /tmp/cron.log"
-      "*/60 * * * * jcleng /home/jcleng/下载/aliyunpan-v0.2.6-linux-amd64/aliyunpan token update -mode 2"
-    ];
-  };
+
+
 }
