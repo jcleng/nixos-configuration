@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+  nix.settings.substituters = [ "http://cache.leng2011.icu" "https://mirrors.ustc.edu.cn/nix-channels/store" ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -111,6 +112,13 @@
    ntfs3g
    xorg.xev
    xorg.xmodmap
+   wqy_microhei
+   wqy_zenhei
+   unzip
+   # libsForQt5.sddm-kcm
+   bibata-cursors
+   xorg.xhost
+   flatpak-builder
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -150,12 +158,18 @@ export XMODIFIERS=@im=fcitx
 export SDL_IM_MODULE=fcitx
 export GLFW_IM_MODULE=ibus
 export DOCKER_HOST=tcp://0.0.0.0:39012
+
 ";
 
 
 services.xserver.displayManager.sddm.settings={
    X11={
       ServerArguments="-dpi 192";
+      EnableHiDPI=true;
+   };
+   Theme={
+      CursorTheme="Bibata-Modern-Classic";
+      CursorSize=48;
    };
 };
 
@@ -167,6 +181,7 @@ services.xserver.displayManager.sddm.settings={
    ];
   };
   programs.kdeconnect.enable=true;
+  programs.command-not-found.enable=true;
 
 
 
